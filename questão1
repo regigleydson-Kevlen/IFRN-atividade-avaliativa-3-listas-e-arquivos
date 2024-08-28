@@ -1,0 +1,11 @@
+import random
+
+num_linhas = int(input("Digite a quantidade de linhas na matriz: "))
+num_colunas = int(input("Digite a quantidade de colunas em cada linha: "))
+
+matriz_original = [[random.randint(1, 100) for _ in range(num_colunas)] for _ in range(num_linhas)]
+print(f"\nMatriz Original: \n{matriz_original}")
+
+matriz_transposta = [[matriz_original[linha][coluna] for linha in range(num_linhas)] for coluna in range(num_colunas)]
+
+print(f"\nMatriz Transposta: \n{matriz_transposta}")
