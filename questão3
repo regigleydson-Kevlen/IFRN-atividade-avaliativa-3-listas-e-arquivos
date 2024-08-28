@@ -1,0 +1,42 @@
+import random
+import itertools
+import sys
+
+n = int(input("Informe o tamanho da lista (deve ser entre 7 e 60): "))
+if n < 7 or n > 60:
+    sys.exit("Informe um tamanho entre 7 e 60")
+
+numeros = random.sample(range(1, 61), n)
+numeros.sort()
+print(f"Lista de numero gerado: {numeros}")
+
+def combinar(lista, tamanho):
+    return list(itertools.combinations(lista, tamanho))
+
+combinacoes = combinar(numeros, 6)
+
+with open('numeros_escolhidos.txt', 'w') as f:
+    f.write(';'.join(map(str, numeros)) + '\n')
+
+with open('combinacoes.txt', 'w') as f:
+    for c in combinacoes:
+        f.write(';'.join(map(str, c)) + '\n')
+
+def calcular_probabilidades(n):
+    total_numeros = 60
+    combinacoes_6 = len(combinar(list(range(1, total_numeros + 1)), 6))
+    
+    probabilidade_sena = 1 / combinacoes_6 if combinacoes_6 > 0 else 0
+    
+    combinacoes_5 = len(combinar(list(range(1, total_numeros + 1)), 5))
+    combinacoes_4 = len(combinar(list(range(1, total_numeros + 1)), 4))
+    probabilidade_quina = 1 / combinacoes_5 if combinacoes_5 > 0 else 0
+    probabilidade_quadra = 1 / combinacoes_4 if combinacoes_4 > 0 else 0
+    
+    return combinacoes_6, probabilidade_sena, probabilidade_quina, probabilidade_quadra
+
+total_combinacoes, prob_sena, prob_quina, prob_quadra = calcular_probabilidades(n)
+print(f"Total de combinaçãos geradas: {len(combinacoes)}")
+print(f"Probabilidade de acertar a sena: {prob_sena:.10f}")
+print(f"Probabilidade de acertar a quina: {prob_quina:.10f}")
+print(f"Probabilidade de acertar a quadra: {prob_quadra:.10f}")
