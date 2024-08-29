@@ -1,0 +1,71 @@
+import csv
+
+nome_arquivo = input("Nome do arquivo: ")
+
+contagem_campus = {}
+contagem_ano = {}
+contagem_curso = {}
+
+total_alunos = 0
+
+with open(nome_arquivo, 'r', encoding='utf-8') as arquivo:
+    leitor = csv.reader(arquivo, delimiter=';')
+    
+    for linha in leitor:
+        if len(linha) >= 8:
+            campus = linha[7].strip()
+            ano = linha[5][:4].strip()
+            curso = linha[4].strip()
+            
+            if campus:
+                if campus not in contagem_campus:
+                    contagem_campus[campus] = 0
+                contagem_campus[campus] += 1
+            
+            if ano:
+                if ano not in contagem_ano:
+                    contagem_ano[ano] = 0
+                contagem_ano[ano] += 1
+            
+            if curso and campus:
+                if campus not in contagem_curso:
+                    contagem_curso[campus] = {}
+                if curso not in contagem_curso[campus]:
+                    contagem_curso[campus][curso] = 0
+                contagem_curso[campus][curso] += 1
+            
+            total_alunos += 1
+
+lista_campus = []
+for campus, quantidade in contagem_campus.items():
+    percentual = (quantidade / total_alunos) * 100
+    lista_campus.append([campus, quantidade, round(percentual, 2)])
+
+with open('alunos_ifrn_campus.csv', 'w', encoding='utf-8', newline='') as arquivo:
+    escritor = csv.writer(arquivo, delimiter=';')
+    escritor.writerows(lista_campus)
+
+lista_ano = []
+for ano, quantidade in contagem_ano.items():
+    lista_ano.append([ano, quantidade])
+
+with open('alunos_ifrn_ano.csv', 'w', encoding='utf-8', newline='') as arquivo:
+    escritor = csv.writer(arquivo, delimiter=';')
+    escritor.writerows(lista_ano)
+
+print("Campi disponíveis:")
+for campus in contagem_campus.keys():
+    print(campus)
+    
+escolha = input("Escolha um campus: ").strip()
+
+if escolha in contagem_curso:
+    lista_cursos = []
+    for curso, quantidade in contagem_curso[escolha].items():
+        lista_cursos.append([curso, quantidade])
+
+    with open('alunos_ifrn_campus_curso.csv', 'w', encoding='utf-8', newline='') as arquivo:
+        escritor = csv.writer(arquivo, delimiter=';')
+        escritor.writerows(lista_cursos)
+else:
+    print("Campus escolhido não é válido.")
