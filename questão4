@@ -1,0 +1,33 @@
+import random
+import sys
+
+num_elementos = int(input("Informe a quantidade de elementos da lista: "))
+
+if num_elementos <= 0:
+    sys.exit('Informe um número positivo para a quantidade de elementos!')
+
+lista_numeros = [random.randint(0, 99) for _ in range(num_elementos)]
+
+lista_numeros.sort()
+
+soma_total = sum(lista_numeros)
+media = soma_total / num_elementos
+
+tamanho_lista = len(lista_numeros)
+indice_mediana = tamanho_lista // 2
+
+if tamanho_lista % 2 == 0:
+    mediana = (lista_numeros[indice_mediana - 1] + lista_numeros[indice_mediana]) / 2
+else:
+    mediana = lista_numeros[indice_mediana]
+
+soma_quadrados_diferenca = sum((numero - media) ** 2 for numero in lista_numeros)
+variancia_populacional = soma_quadrados_diferenca / num_elementos
+
+desvio_padrao_populacional = variancia_populacional ** 0.5
+
+print(f"\nLista gerada aleatoriamente: {lista_numeros}")
+print(f"Média dos valores: {media:.2f}")
+print(f"Mediana: {mediana:.2f}")
+print(f"Variância populacional: {variancia_populacional:.3f}")
+print(f"Desvio padrão populacional: {desvio_padrao_populacional:.3f}")
